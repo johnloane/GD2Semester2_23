@@ -1,7 +1,14 @@
 package com.dkit.gd2.johnloane;
 
-import java.util.LinkedList;
-import java.util.ListIterator;
+import com.dkit.gd2.johnloane.dao.IStudentDAOInterface;
+import com.dkit.gd2.johnloane.dao.MysqlStudentDAO;
+import com.dkit.gd2.johnloane.dto.Student;
+import com.dkit.gd2.johnloane.exceptions.DAOException;
+
+import java.awt.*;
+import java.util.*;
+import java.util.List;
+
 
 /**
  * Collections
@@ -11,18 +18,242 @@ public class App
 {
     public static void main( String[] args )
     {
-        System.out.println( "Collections" );
-        linkedListDemo();
-        linkedListQuestion1();
-        LinkedList<String> words = new LinkedList<>();
-        populateLinkedList(words);
-        linkedListQuestion2(words);
-        linkedListQuestion3(words);
-        setDemo();
+        System.out.println( "DB Connections" );
+        IStudentDAOInterface studentDAO = new MysqlStudentDAO();
+        getAndPrintAllStudents(studentDAO);
+
+
+//        linkedListDemo();
+//        linkedListQuestion1();
+//        LinkedList<String> words = new LinkedList<>();
+//        populateLinkedList(words);
+//        linkedListQuestion2(words);
+//        linkedListQuestion3(words);
+//        setDemo();
+//        Set<String> existingEmails = new HashSet<>();
+//        populateExistingEmails(existingEmails);
+//        setUniqueEmailDemo("albert@dkit.ie", existingEmails);
+//        mapDemo();
+//        stackDemo();
+//        queueDemo();
+        //priorityQueueDemo();
+        //studentPriorityQueueDemo();
+        //studentTreeSetDemo();
     }
+
+    private static void getAndPrintAllStudents(IStudentDAOInterface studentDAO)
+    {
+        try
+        {
+            List<Student> students = studentDAO.findAllStudents();
+            printAllStudent(students);
+        }
+        catch (DAOException e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void printAllStudent(List<Student> students)
+    {
+        if(students == null || students.isEmpty())
+        {
+            System.out.println("No students found");
+        }
+        else
+        {
+            for(Student s : students)
+            {
+                System.out.println(s);
+            }
+        }
+    }
+
+    private static void studentTreeSetDemo()
+    {
+        TreeSet<StudentOrdered> treeSet = new TreeSet<>();
+        treeSet.add(new StudentOrdered("Albert", 50));
+        treeSet.add(new StudentOrdered("Dylan", 60));
+        treeSet.add(new StudentOrdered("Ross", 70));
+        treeSet.add(new StudentOrdered("Craig", 80));
+        treeSet.add(new StudentOrdered("Mohammed", 90));
+        treeSet.add(new StudentOrdered("Dzeraldas", 100));
+        treeSet.add(new StudentOrdered("Gracie", 100));
+        treeSet.add(new StudentOrdered("Dominik", 40));
+        treeSet.add(new StudentOrdered("Dillon", 30));
+        treeSet.add(new StudentOrdered("Ethan", 20));
+        treeSet.add(new StudentOrdered("Julius", 10));
+        treeSet.add(new StudentOrdered("Tadhg", 10));
+        System.out.println(treeSet);
+
+    }
+
+    private static void studentPriorityQueueDemo()
+    {
+        PriorityQueue<StudentOrdered> queue = new PriorityQueue<>();
+        queue.add(new StudentOrdered("Albert", 50));
+        queue.add(new StudentOrdered("Dylan", 60));
+        queue.add(new StudentOrdered("Ross", 70));
+        queue.add(new StudentOrdered("Craig", 80));
+        queue.add(new StudentOrdered("Mohammed", 90));
+        queue.add(new StudentOrdered("Dzeraldas", 100));
+        queue.add(new StudentOrdered("Dominik", 40));
+        queue.add(new StudentOrdered("Dillon", 30));
+        queue.add(new StudentOrdered("Ethan", 20));
+        queue.add(new StudentOrdered("Julius", 10));
+        System.out.println(queue);
+        System.out.println(queue.peek());
+        System.out.println(queue.size());
+        int queueSize = queue.size();
+        System.out.println(queue);
+        for(int i = 0; i < queueSize; i++)
+        {
+            System.out.println(queue.poll());
+        }
+        //System.out.println(queue.poll());
+        System.out.println(queue);
+        System.out.println(queue.contains("Ross"));
+    }
+
+    private static void priorityQueueDemo()
+    {
+        PriorityQueue<String> queue = new PriorityQueue<>();
+        queue.add("Albert");
+        queue.add("Dylan");
+        queue.add("Ross");
+        queue.add("Craig");
+        queue.add("Mohammed");
+        queue.add("Dzeraldas");
+        queue.add("Dominik");
+        queue.add("Dillon");
+        queue.add("Ethan");
+        queue.add("Julius");
+        System.out.println(queue);
+        System.out.println(queue.peek());
+        System.out.println(queue.size());
+        int queueSize = queue.size();
+        System.out.println(queue);
+        for(int i = 0; i < queueSize; i++)
+        {
+            System.out.println(queue.poll());
+        }
+        //System.out.println(queue.poll());
+        System.out.println(queue);
+        System.out.println(queue.contains("Ross"));
+    }
+
+    private static void queueDemo()
+    {
+        Queue<String> queue = new LinkedList<>();
+        queue.add("Albert");
+        queue.add("Dylan");
+        queue.add("Ross");
+        queue.add("Craig");
+        queue.add("Mohammed");
+        queue.add("Dzeraldas");
+        queue.add("Dominik");
+        queue.add("Dillon");
+        queue.add("Ethan");
+        queue.add("Julius");
+        System.out.println(queue);
+        System.out.println(queue.peek());
+        System.out.println(queue.size());
+        System.out.println(queue);
+        System.out.println(queue.poll());
+        System.out.println(queue);
+        System.out.println(queue.contains("Ross"));
+    }
+
+    private static void stackDemo()
+    {
+        Stack<String> stack = new Stack<>();
+        stack.push("Albert");
+        stack.push("Dylan");
+        stack.push("Ross");
+        stack.push("Craig");
+        stack.push("Mohammed");
+        stack.push("Dzeraldas");
+        stack.push("Dominik");
+        stack.push("Dillon");
+        stack.push("Ethan");
+        stack.push("Julius");
+        System.out.println(stack);
+        System.out.println(stack.peek());
+        System.out.println(stack.size());
+        System.out.println(stack);
+        System.out.println(stack.pop());
+        System.out.println(stack);
+        System.out.println(stack.search("Ross"));
+
+    }
+
+    //This method will create a map that stores student's names and their favourite colours
+    private static void mapDemo()
+    {
+        Map<String, Color> studentFavouriteColours = new HashMap<>();
+        studentFavouriteColours.put("Albert", Color.BLUE);
+        studentFavouriteColours.put("Dylan", Color.RED);
+        studentFavouriteColours.put("Ross", Color.GREEN);
+        studentFavouriteColours.put("Craig", Color.YELLOW);
+        studentFavouriteColours.put("Mohammed", Color.ORANGE);
+        studentFavouriteColours.put("Dzeraldas", Color.ORANGE);
+        studentFavouriteColours.put("Dominik", Color.ORANGE);
+        studentFavouriteColours.put("Dillon", Color.BLACK);
+        studentFavouriteColours.put("Ethan", Color.WHITE);
+        studentFavouriteColours.put("Julius", Color.PINK);
+        System.out.println(studentFavouriteColours);
+        //Print the favourite colour of Dylan
+        System.out.println(studentFavouriteColours.get("Dylan"));
+    }
+
+    private static void populateExistingEmails(Set<String> existingEmails)
+    {
+        existingEmails.add("albert@dkit.ie");
+        existingEmails.add("dylan@dkit.ie");
+        existingEmails.add("ross@dkit.ie");
+    }
+
+
+    // Write a method that takes an argument of email and checks whether this email already exists in a set of emails
+    private static void setUniqueEmailDemo(String email, Set<String> existingEmails)
+    {
+        if(existingEmails.contains(email))
+        {
+            System.out.println("Email already exists");
+        }
+        else
+        {
+            existingEmails.add(email);
+            System.out.println("Email is unique");
+        }
+    }
+
 
     private static void setDemo()
     {
+        Set<String> names = new TreeSet<>();
+        //Set<String> names = new TreeSet<>();
+        //Set<String> names = new LinkedHashSet<>();
+        names.add("Albert");
+        names.add("Dylan");
+        names.add("Ross");
+        names.add("Craig");
+        names.add("Mohammed");
+        names.add("Dzeraldas");
+        names.add("Dominik");
+        names.add("Dillon");
+        names.add("Ethan");
+        names.add("julius");
+        System.out.println(names);
+        String bestName = "Ross";
+        //Print the int value associated with the first character of the best name
+        System.out.println((int)bestName.toCharArray()[0]);
+        //Raise 31 to the power of 3
+        System.out.println(((int)bestName.toCharArray()[0]) * Math.pow(31, 3));
+
+
+
+
 
     }
 
@@ -97,7 +328,7 @@ public class App
         iter.next(); // A B D |
         iter.add("E"); // A B D E |
         System.out.println(iter.next()); // A B D E |
-        iter.next();
+        //iter.next();
         iter.add("F"); // A B D E F |
     }
 

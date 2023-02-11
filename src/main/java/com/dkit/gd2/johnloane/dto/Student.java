@@ -18,12 +18,12 @@ public class Student
         return studentID;
     }
 
-    public String getFirst_name()
+    public String getFirstName()
     {
         return firstName;
     }
 
-    public String getLast_name()
+    public String getLastName()
     {
         return lastName;
     }

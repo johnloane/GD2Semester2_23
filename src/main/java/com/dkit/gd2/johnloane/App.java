@@ -20,7 +20,10 @@ public class App
     {
         System.out.println( "DB Connections" );
         IStudentDAOInterface studentDAO = new MysqlStudentDAO();
-        getAndPrintAllStudents(studentDAO);
+        //getAndPrintAllStudents(studentDAO);
+        //registerNewStudent(studentDAO);
+        //deleteStudent(studentDAO);
+        updateStudent(studentDAO);
 
 
 //        linkedListDemo();
@@ -39,6 +42,68 @@ public class App
         //priorityQueueDemo();
         //studentPriorityQueueDemo();
         //studentTreeSetDemo();
+    }
+
+    private static void updateStudent(IStudentDAOInterface studentDAO)
+    {
+        try
+        {
+            Student s = new Student("D00222223", "Albert", "Skalinski");
+            boolean updated = studentDAO.updateStudentID(s, "D00222222");
+            if(updated)
+            {
+                System.out.println("Student updated");
+            }
+            else
+            {
+                System.out.println("Student not updated");
+            }
+        }
+        catch (DAOException e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void deleteStudent(IStudentDAOInterface studentDAO)
+    {
+        try
+        {
+            boolean deleted = studentDAO.deleteStudent("D00251254");
+            if(deleted)
+            {
+                System.out.println("Student deleted");
+            }
+            else
+            {
+                System.out.println("Student not deleted");
+            }
+        }
+        catch (DAOException e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void registerNewStudent(IStudentDAOInterface studentDAO)
+    {
+        Student s = new Student("D00222222", "Albert", "Loane");
+        try
+        {
+            boolean registered = studentDAO.registerStudent(s);
+            if(registered)
+            {
+                System.out.println("Student registered");
+            }
+            else
+            {
+                System.out.println("Student not registered");
+            }
+        }
+        catch (DAOException e)
+        {
+            System.out.println(e.getMessage());
+        }
     }
 
     private static void getAndPrintAllStudents(IStudentDAOInterface studentDAO)

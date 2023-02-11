@@ -8,4 +8,8 @@ public interface IStudentDAOInterface
 {
     public List<Student> findAllStudents() throws DAOException;
     public Student findStudentByStudentID(String studentID) throws DAOException;
+    public boolean registerStudent(Student s) throws DAOException;
+    public boolean deleteStudent(String studentID) throws DAOException;
+    public boolean updateStudent(Student s) throws DAOException;
+    public boolean updateStudentID(Student s, String previousID) throws DAOException;
 }

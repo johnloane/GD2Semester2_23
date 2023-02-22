@@ -27,16 +27,37 @@ public class Attendance
         gd2Attendance.populateLectures();
         gd2Attendance.printLectures();
         gd2Attendance.fullAttendance();
+        gd2Attendance.firstLectureOnly();
+        gd2Attendance.oneOrMoreLectures();
 
+    }
+
+    private Set<String> oneOrMoreLectures()
+    {
+        Set oneOrMoreLectures = new HashSet();
+        for(Lecture lecture : lectures)
+        {
+            oneOrMoreLectures.addAll(lecture.getStudents());
+        }
+        System.out.println("Students who attended one or more lectures: " + oneOrMoreLectures);
+        return oneOrMoreLectures;
+    }
+
+    private void firstLectureOnly()
+    {
+        Set firstLectureOnly = new HashSet();
+        firstLectureOnly.addAll(lectures.get(0).getStudents());
+        for(int i=1; i < lectures.size(); i++)
+        {
+            firstLectureOnly.removeAll(lectures.get(i).getStudents());
+        }
+        System.out.println("Students who attended first lecture only: " + firstLectureOnly);
     }
 
     private void fullAttendance()
     {
         Set fullAttendance = new HashSet();
-        for(Lecture lecture : lectures)
-        {
-            fullAttendance.addAll(lecture.getStudents());
-        }
+        fullAttendance = oneOrMoreLectures();
         for(Lecture lecture : lectures)
         {
             fullAttendance.retainAll(lecture.getStudents());
@@ -69,3 +90,5 @@ public class Attendance
         lectures.add(lecture2);
     }
 }
+
+

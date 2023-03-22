@@ -1,0 +1,14 @@
+{
+  "name": "Ross",
+  "email": "ross@dkit.ie",
+  "age": 20,
+  "isDeveloper": true,
+  "address": {
+    "houseNumber": "10",
+    "street": "Main Street",
+    "city": "Dundalk",
+    "county": "Louth",
+    "eircode": "A61D2D3",
+    "country": "Ireland"
+  }
+}

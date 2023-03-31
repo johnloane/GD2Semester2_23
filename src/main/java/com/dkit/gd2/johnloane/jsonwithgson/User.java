@@ -6,15 +6,15 @@ public class User
     private String email;
     private int age;
     private boolean isDeveloper;
-    private Address address;
+    //private Address address;
 
-    public User(String name, String email, int age, boolean isDeveloper, Address address)
+    public User(String name, String email, int age, boolean isDeveloper)
     {
         this.name = name;
         this.email = email;
         this.age = age;
         this.isDeveloper = isDeveloper;
-        this.address = address;
+        //this.address = address;
     }
 
     public String getName()
@@ -45,7 +45,6 @@ public class User
                 ", email='" + email + '\'' +
                 ", age=" + age +
                 ", isDeveloper=" + isDeveloper +
-                ", address=" + address +
                 '}';
     }
 }

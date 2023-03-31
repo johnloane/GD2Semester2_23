@@ -1,12 +1,11 @@
 package com.dkit.gd2.johnloane.jsonwithgson;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 
 public class MainApp
 {
@@ -20,7 +19,88 @@ public class MainApp
 //        User rossD = deserialize(rossJSON);
 //        System.out.println(rossD);
         //createRestaurant();
-        deserializeList();
+        //deserializeList();
+        //serializeMap();
+        //deserializeMap();
+        //serializeSet();
+        //derserializeSet();
+        serializeWithNullWithControl();
+        //deserializeWithNullWithControl();
+    }
+
+    private static void serializeWithNullWithControl()
+    {
+        User ross = new User(null, "ross@dkit.ie", 20, true);
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.serializeNulls();
+        Gson gson = gsonBuilder.create();
+
+        String rossJSON = gson.toJson(ross);
+        System.out.println(rossJSON);
+    }
+
+    private static void deserializeWithNull()
+    {
+        String rossJson = "{'email':'ross@dkit.ie'}";
+        Gson gson = new Gson();
+        User ross = gson.fromJson(rossJson, User.class);
+        System.out.println(ross);
+    }
+
+    private static void serializeWithNull()
+    {
+        User ross = new User(null, "ross@dkit.ie", 20, true);
+        Gson gson = new Gson();
+        String rossJSON = gson.toJson(ross);
+        System.out.println(rossJSON);
+    }
+
+    private static void derserializeSet()
+    {
+        String studentSetJson = "['Adam','Dovydas','Dawood','Craig','Dillon','Dominik','Albert','Daniel','Dzeraldas']";
+        Gson gson = new Gson();
+        //Type studentSetType = new TypeToken<HashSet<String>>(){}.getType();
+        HashSet<String> studentSet = gson.fromJson(studentSetJson, HashSet.class);
+        System.out.println(studentSet);
+    }
+
+    private static void serializeSet()
+    {
+        HashSet<String> students = new HashSet<>();
+        students.add("Adam");
+        students.add("Albert");
+        students.add("Craig");
+        students.add("Dillon");
+        students.add("Dawood");
+        students.add("Dovydas");
+        students.add("Dzeraldas");
+        students.add("Dominik");
+        students.add("Daniel");
+        Gson gson = new Gson();
+        String studentsJSON = gson.toJson(students);
+        System.out.println(studentsJSON);
+    }
+
+    private static void deserializeMap()
+    {
+        String moneyJson = "{'1$':{'amount':1, 'currency':'Dollar'}, '2$':{'amount':2, 'currency':'Dollar'}, '3€':{'amount':3, 'currency':'Euro'}}";
+
+        Gson gson = new Gson();
+        Type moneyMapType = new TypeToken<HashMap<String, AmountWithCurrency>>(){}.getType();
+        HashMap<String, AmountWithCurrency> moneyMap = gson.fromJson(moneyJson, moneyMapType);
+        System.out.println(moneyMap);
+    }
+
+    private static void serializeMap()
+    {
+        HashMap<String, List<String>> students = new HashMap<>();
+        students.put("A", Arrays.asList("Adam", "Albert"));
+        students.put("C", Arrays.asList("Craig"));
+        students.put("D", Arrays.asList("Dillon", "Dawood", "Dovydas", "Dzeraldas", "Dominik", "Daniel"));
+
+        Gson gson = new Gson();
+        String studentsJSON = gson.toJson(students);
+        System.out.println(studentsJSON);
     }
 
     private static void deserializeList()

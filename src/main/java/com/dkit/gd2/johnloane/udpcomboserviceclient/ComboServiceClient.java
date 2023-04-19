@@ -1,7 +1,7 @@
 package com.dkit.gd2.johnloane.udpcomboserviceclient;
 
-import java.net.DatagramSocket;
-import java.net.InetAddress;
+import java.io.IOException;
+import java.net.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -28,6 +28,85 @@ public class ComboServiceClient
         {
             //Set up the address information for the destination
             InetAddress serverAddress = InetAddress.getByName("localhost");
+
+            //Create a datagram for sending data
+            clientSocket = new DatagramSocket(clientPort);
+
+            boolean continueRunning = true;
+
+            //Repeat until the user chooses to quit
+            while(continueRunning)
+            {
+                displayMenu();
+                int choice = getChoice(keyboard);
+                String message = null;
+                boolean sendMessage = true;
+                switch(choice)
+                {
+                    case 1:
+                        System.out.println("Please enter a message to be echoed: ");
+                        message = "echo" + breakingCharacters+keyboard.nextLine();
+                        break;
+                    case 2:
+                        message = "daytime";
+                        break;
+                    case 3:
+                        message = "stats";
+                        break;
+                    case 0:
+                        continueRunning = false;
+                        sendMessage = false;
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please enter a number between 0 and 3");
+                        sendMessage = false;
+                        break;
+                }
+                //If the sendMessage flag is true, the user chosen has chosen a valid option that is not quit
+                if(sendMessage)
+                {
+                    byte[] outgoingMessageBuffer = message.getBytes();
+                    //Create a datagram for sending data
+                    DatagramPacket outgoingPacket = new DatagramPacket(outgoingMessageBuffer, outgoingMessageBuffer.length, serverAddress, serverPort);
+                    //Send the packet
+                    clientSocket.send(outgoingPacket);
+                    System.out.println("Message sent " + message);
+
+                    //Deal with the response
+                    byte[] responseBuffer = new byte[MAX_LEN];
+                    DatagramPacket incomingPacket = new DatagramPacket(responseBuffer, responseBuffer.length);
+                    //Wait for a response and store it in incomingPacket
+                    clientSocket.receive(incomingPacket);
+                    //Convert buffer into a string
+                    String response = new String(incomingPacket.getData());
+                    System.out.println("Response received: " + response.trim() + ".");
+                }
+            }
+            System.out.println("Thank you for using the UDP Combo Service");
+            Thread.sleep(3000);
+        }
+        catch(SocketException e)
+        {
+            System.out.println("Socket: " + e.getMessage());
+        }
+        catch(UnknownHostException e)
+        {
+            System.out.println("Unknown host: " + e.getMessage());
+        }
+        catch(InterruptedException e)
+        {
+            System.out.println(e.getMessage());
+        }
+        catch(IOException e)
+        {
+            System.out.println("IO: " + e.getMessage());
+        }
+        finally
+        {
+            if(clientSocket != null)
+            {
+                clientSocket.close();
+            }
         }
     }
 

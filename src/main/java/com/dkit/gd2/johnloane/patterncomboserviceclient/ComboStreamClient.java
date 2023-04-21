@@ -135,6 +135,7 @@ public class ComboStreamClient
                 keyboard.nextLine();
             }
         }
+        keyboard.nextLine();
         return number;
     }
 

@@ -18,7 +18,7 @@ public class ComboStreamServer
 
             boolean continueRunning = true;
 
-            while(continueRunning)
+            while (continueRunning)
             {
                 System.out.println("Server is up and listening for connections....");
                 //Wait for an incoming connection and build a communications link
@@ -34,7 +34,7 @@ public class ComboStreamServer
                 String incomingMessage = "";
                 String response;
 
-                while(!incomingMessage.equals(ComboServiceDetails.QUIT_COMMAND))
+                while (!incomingMessage.equals(ComboServiceDetails.QUIT_COMMAND))
                 {
                     response = null;
                     incomingMessage = input.nextLine();
@@ -44,82 +44,33 @@ public class ComboStreamServer
                     String[] components = incomingMessage.split(ComboServiceDetails.BREAKING_CHARACTERS);
 
                     CommandFactory commandFactory = new CommandFactory();
+
+                    //Figure out what command to send back to the client
+                    Command command = commandFactory.createCommand(components[0]);
+
+                    //If we get a command back from the factory, then the command is an accepted action
+                    //If not then the command is unrecognised
+
+                    if (command != null)
+                    {
+                        response = command.createResponse(components);
+                    } else if (components[0].equals(ComboServiceDetails.QUIT_COMMAND))
+                    {
+                        response = ComboServiceDetails.SESSION_TERMINATED;
+                    } else
+                    {
+                        response = ComboServiceDetails.UNRECOGNISED;
+                    }
                     output.println(response);
                     output.flush();
                 }
+                dataSocket.close();
 
             }
-
-            /
-
-            Scanner keyboard = new Scanner(System.in);
-            String message = "";
-            while(!message.equals(TCPComboServiceDetails.QUIT_COMMAND))
-            {
-                displayMenu();
-                int choice = getNumber(keyboard);
-                String response = "";
-                if(choice >= 0 && choice < 4)
-                {
-                    switch(choice)
-                    {
-                        case 0:
-                            message = TCPComboServiceDetails.QUIT_COMMAND;
-
-                            //Send message
-                            output.println(message);
-                            output.flush();
-
-                            response = input.nextLine();
-                            if(response.equals(TCPComboServiceDetails.SESSION_TERMINATED))
-                            {
-                                System.out.println("Session ended");
-                            }
-                            break;
-                        case 1:
-                            message = generateEcho(keyboard);
-
-                            //Send message to server
-                            output.println(message);
-                            output.flush();
-
-                            //Get response from server
-                            response = input.nextLine();
-                            System.out.println(response);
-                            break;
-                        case 2:
-                            message = TCPComboServiceDetails.DAYTIME_COMMAND;
-
-                            //Send message to server
-                            output.println(message);
-                            output.flush();
-
-                            //Get response from server
-                            response = input.nextLine();
-                            System.out.println(response);
-                            break;
-                        case 3:
-                            message = TCPComboServiceDetails.STATS_COMMAND;
-
-                            //Send message to server
-                            output.println(message);
-                            output.flush();
-
-                            //Get response from server
-                            response = input.nextLine();
-                            System.out.println(response);
-                            break;
-                    }
-                }
-                else
-                {
-                    System.out.println("Invalid choice");
-                }
-            }
-        }
-        catch(IOException ioe)
+            listeningSocket.close();
+        } catch (IOException ioe)
         {
-            System.out.println("Error: " + ioe.getMessage());
+            System.out.println("We have a problem: " + ioe.getMessage());
         }
     }
 }

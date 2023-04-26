@@ -15,18 +15,10 @@ public class CommandFactory
         {
             c = new DaytimeCommand();
         }
-        /*else if(command.equals(ComboServiceDetails.STATS_COMMAND))
+        else if(command.equals(ComboServiceDetails.STATS_COMMAND))
         {
-            command = new StatsCommand();
+            c = new StatsCommand();
         }
-        else if(command.equals(ComboServiceDetails.QUIT_COMMAND))
-        {
-            command = new QuitCommand();
-        }
-        else
-        {
-            command = new UnrecognisedCommand();
-        }*/
         return c;
     }
 }

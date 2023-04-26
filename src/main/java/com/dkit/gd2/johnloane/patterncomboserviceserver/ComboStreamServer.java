@@ -16,7 +16,14 @@ public class ComboStreamServer
             //Step 1: Listen for incoming connections and build communications link
             ServerSocket listeningSocket = new ServerSocket(ComboServiceDetails.SERVER_PORT);
 
+            //Set up ThreadGroup to store all of the client threads together
+            ThreadGroup clientThreads = new ThreadGroup("Client Threads");
+            //Place more emphasis on accepting than servicing
+            clientThreads.setMaxPriority(Thread.currentThread().getPriority() - 1);
+
+
             boolean continueRunning = true;
+            int threadCount = 0;
 
             while (continueRunning)
             {
@@ -24,53 +31,17 @@ public class ComboStreamServer
                 //Wait for an incoming connection and build a communications link
                 Socket dataSocket = listeningSocket.accept();
 
-                //Step 2: Build input and output streams
-                OutputStream out = dataSocket.getOutputStream();
-                PrintWriter output = new PrintWriter(new OutputStreamWriter(out));
+                threadCount++;
+                System.out.println("The server has now accepted " + threadCount + " connections");
 
-                InputStream in = dataSocket.getInputStream();
-                Scanner input = new Scanner(new InputStreamReader(in));
-
-                String incomingMessage = "";
-                String response;
-
-                while (!incomingMessage.equals(ComboServiceDetails.QUIT_COMMAND))
-                {
-                    response = null;
-                    incomingMessage = input.nextLine();
-                    System.out.println("Incoming message: " + incomingMessage);
-
-                    //Break the incoming message into its components
-                    String[] components = incomingMessage.split(ComboServiceDetails.BREAKING_CHARACTERS);
-
-                    CommandFactory commandFactory = new CommandFactory();
-
-                    //Figure out what command to send back to the client
-                    Command command = commandFactory.createCommand(components[0]);
-
-                    //If we get a command back from the factory, then the command is an accepted action
-                    //If not then the command is unrecognised
-
-                    if (command != null)
-                    {
-                        response = command.createResponse(components);
-                    } else if (components[0].equals(ComboServiceDetails.QUIT_COMMAND))
-                    {
-                        response = ComboServiceDetails.SESSION_TERMINATED;
-                    } else
-                    {
-                        response = ComboServiceDetails.UNRECOGNISED;
-                    }
-                    output.println(response);
-                    output.flush();
-                }
-                dataSocket.close();
-
+                PatternComboServiceThread newClient = new PatternComboServiceThread(clientThreads, dataSocket.getInetAddress() + "", dataSocket, threadCount);
+                newClient.start();
             }
             listeningSocket.close();
-        } catch (IOException ioe)
+        }
+        catch(IOException e)
         {
-            System.out.println("We have a problem: " + ioe.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 }
